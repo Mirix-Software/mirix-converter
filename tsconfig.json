@@ -1,0 +1,49 @@
+{
+	"compilerOptions": {
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+		"strictPropertyInitialization": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"baseUrl": "./sources",
+		"outDir": ".build",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"target": "es2023",
+		"declaration": true,
+		"newLine": "lf",
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"paths": {
+			"@prisma/client": [
+				"../.prisma-client"
+			],
+			"@common/*": [
+				"common/*"
+			],
+			"@core/*": [
+				"core/*"
+			],
+			"@core-module/*": [
+				"core-modules/*"
+			],
+			"@domain/*": [
+				"domains/*"
+			],
+			"@test-utilities/*": [
+				"../tests/test-utilities/*"
+			],
+		},
+		"noEmitOnError": true,
+	},
+	"include": [
+		"sources",
+		"tests",
+	],
+}
