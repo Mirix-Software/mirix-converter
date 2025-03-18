@@ -1,0 +1,26 @@
+import { MimeType } from '@common/types';
+
+export const FFMPEG_VIDEO_CODECS = [
+  MimeType.VIDEO_MP4,
+  MimeType.VIDEO_MKV,
+  MimeType.VIDEO_AVI,
+  MimeType.VIDEO_MOV,
+  MimeType.VIDEO_WEBM,
+  MimeType.VIDEO_MPG,
+  MimeType.VIDEO_3GP,
+  MimeType.VIDEO_3G2,
+  MimeType.VIDEO_ASF,
+  MimeType.VIDEO_FLV,
+  MimeType.VIDEO_M4V,
+  MimeType.VIDEO_MTS,
+  MimeType.VIDEO_OGG,
+  MimeType.VIDEO_TS,
+  MimeType.VIDEO_VOB,
+  MimeType.VIDEO_WMV,
+  MimeType.VIDEO_DIVX,
+  MimeType.VIDEO_F4V,
+  MimeType.VIDEO_M2TS,
+  MimeType.VIDEO_QT,
+  MimeType.VIDEO_WEBM_VP8,
+  MimeType.VIDEO_WEBM_VP9,
+];
