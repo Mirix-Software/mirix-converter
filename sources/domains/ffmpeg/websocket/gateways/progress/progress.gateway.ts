@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 
-import { ProgressData, ProgressEventType, ProgressStatus, ProgressUpdateMessage, SubscriptionResponse } from '@domain/ffmpeg/types';
+import { JobData, ProgressData, ProgressEventType, ProgressStatus, ProgressUpdateMessage, SubscriptionResponse } from '@domain/ffmpeg/types';
 import { Server, Socket } from 'socket.io';
 
 export const FFMPEG_EVENTS = {
@@ -28,7 +28,7 @@ export class FfmpegProgressGateway implements OnGatewayConnection, OnGatewayDisc
   public constructor(private readonly eventEmitter: EventEmitter2) {}
 
   public onModuleInit(): void {
-    this.eventEmitter.on(FFMPEG_EVENTS.JOB_CANCELED, (payload: { jobId: string }) => {
+    this.eventEmitter.on(FFMPEG_EVENTS.JOB_CANCELED, (payload: JobData) => {
       const cancelProgressUpdate: ProgressData = {
         status: ProgressStatus.CANCELED,
         progress: 0,
@@ -37,7 +37,7 @@ export class FfmpegProgressGateway implements OnGatewayConnection, OnGatewayDisc
       this.sendProgressUpdate(payload.jobId, cancelProgressUpdate);
     });
 
-    this.eventEmitter.on('ffmpeg.progress.update', (payload: { jobId: string; progress: ProgressData }) => {
+    this.eventEmitter.on('ffmpeg.progress.update', (payload: ProgressUpdateMessage) => {
       this.sendProgressUpdate(payload.jobId, payload.progress);
     });
   }

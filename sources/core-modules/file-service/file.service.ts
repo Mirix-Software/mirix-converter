@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { Injectable } from '@nestjs/common';
 
-import { DelayCleanupInputObject } from '@domain/ffmpeg/types';
+import { CleanupTempFilesInputObject, DelayCleanupInputObject } from '@domain/ffmpeg/types';
 
 @Injectable()
 class FileService {
@@ -31,15 +31,21 @@ class FileService {
         const files = await fs.readdir(directoryPath);
         const tsFilesToDelete = files.filter((file) => file.includes(`${resolution}`));
 
-        for (const file of tsFilesToDelete) {
-          const filePath = path.join(directoryPath, file);
-
-          await fs.unlink(filePath);
-        }
+        await this.cleanupTempFiles({
+          paths: tsFilesToDelete.map((file) => path.join(directoryPath, file)),
+        });
 
         resolve();
       }, delayMs);
     });
+  }
+
+  public async cleanupTempFiles(inputObject: CleanupTempFilesInputObject): Promise<void> {
+    const { paths } = inputObject;
+
+    for (const filePath of paths) {
+      await fs.unlink(filePath);
+    }
   }
 }
 

@@ -20,12 +20,12 @@ async function bootstrap(): Promise<void> {
   setupOpenApi(application);
 
   application.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:8000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   });
 
-  await application.listen(8020);
+  await application.listen(8000);
 }
 
 bootstrap().catch((error) => {

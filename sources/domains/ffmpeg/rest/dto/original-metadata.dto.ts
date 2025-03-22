@@ -38,14 +38,6 @@ class OriginalMetadataDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   readonly size: number;
-
-  @ApiProperty({
-    description: 'Type',
-    type: 'string',
-  })
-  @IsNotEmpty()
-  @IsString()
-  readonly type: string;
 }
 
 export { OriginalMetadataDto };
