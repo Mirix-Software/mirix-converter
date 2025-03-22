@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-import { FfmpegCommand, ProgressData, ProgressStatus } from '@domain/ffmpeg/types';
+import { FfmpegCommand, JobData, ProgressData, ProgressStatus } from '@domain/ffmpeg/types';
 import { FFMPEG_EVENTS } from '@domain/ffmpeg/websocket/gateways/progress/progress.gateway';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class FfmpegProgressService implements OnModuleInit {
   public constructor(private readonly eventEmitter: EventEmitter2) {}
 
   public onModuleInit(): void {
-    this.eventEmitter.on(FFMPEG_EVENTS.CANCEL_JOB, async (payload: { jobId: string }) => {
+    this.eventEmitter.on(FFMPEG_EVENTS.CANCEL_JOB, async (payload: JobData) => {
       const success = await this.cancelJob(payload.jobId);
 
       if (success) {

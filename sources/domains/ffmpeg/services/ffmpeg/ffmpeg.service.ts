@@ -9,7 +9,7 @@ import { FfmpegHlsService } from '@domain/ffmpeg/services/ffmpeg-hls';
 import { FfmpegProgressService } from '@domain/ffmpeg/services/ffmpeg-progress';
 import { FfmpegResolutionService } from '@domain/ffmpeg/services/ffmpeg-resolution';
 import { VariantPaths } from '@domain/ffmpeg/types';
-import { CleanupTempFilesInputObject, CompressVideoParams, FfmpegCanceledException, HlsConversionInputObject } from '@domain/ffmpeg/types';
+import { CompressVideoParams, FfmpegCanceledException, HlsConversionInputObject } from '@domain/ffmpeg/types';
 import Ffmpeg from 'fluent-ffmpeg';
 import { MemoryStoredFile } from 'nestjs-form-data';
 
@@ -108,8 +108,11 @@ class FfmpegService {
             progress: progressPercentage,
           });
         })
-        .on('error', (err) => {
+        .on('error', async (err) => {
           console.error('Ошибка при компрессии:', err);
+          await this.fileService.cleanupTempFiles({
+            paths: [inputPath, outputPath],
+          });
 
           if (err.message && err.message.includes('Exiting normally, received signal 15')) {
             reject(new FfmpegCanceledException());
@@ -118,7 +121,7 @@ class FfmpegService {
           }
         })
         .on('end', async () => {
-          await this.cleanupTempFiles({
+          await this.fileService.cleanupTempFiles({
             paths: [inputPath],
           });
 
@@ -129,14 +132,6 @@ class FfmpegService {
 
       command.save(outputPath);
     });
-  }
-
-  private async cleanupTempFiles(inputObject: CleanupTempFilesInputObject): Promise<void> {
-    const { paths } = inputObject;
-
-    for (const filePath of paths) {
-      await fs.unlink(filePath);
-    }
   }
 }
 

@@ -121,8 +121,12 @@ class FfmpegHlsService {
         .on('start', (command) => {
           console.log('command', command);
         })
-        .on('error', (err) => {
+        .on('error', async (err) => {
           console.error(`Ошибка при создании ${height}p:`, err);
+          await this.fileService.cleanupTempFiles({
+            paths: [inputPath],
+          });
+          await fs.rmdir(outputDir, { recursive: true });
           if (err.message && err.message.includes('Exiting normally, received signal 15')) {
             reject(new FfmpegCanceledException());
           } else {
